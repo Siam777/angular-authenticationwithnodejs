@@ -4,6 +4,7 @@ const router = express.Router();
 const User= require('../Model/user');
 
 const mongoose = require('mongoose');
+const { json } = require("body-parser");
 const db = "mongodb://localhost:27017/testdb";
 mongoose.connect(db, err=>{
     if(err){
@@ -23,7 +24,7 @@ router.post('/register',( req, res)=>{
       if(error){
           console.log("error");
       }else{
-          res.status(200).send(no);
+          res.status(200).send(registerUser);
       }
   })
 
@@ -51,5 +52,87 @@ router.post('/login',(req,res)=>{
 
 })
 
+router.get('/events',(req,res)=>{
+    let events = [
+        {
+          "_id": "1",
+          "name": "Auto Expo",
+          "description": "lorem ipsum",
+          "date": "2012-04-23T18:25:43.511Z"
+        },
+        {
+          "_id": "2",
+          "name": "Auto Expo",
+          "description": "lorem ipsum",
+          "date": "2012-04-23T18:25:43.511Z"
+        },
+        {
+          "_id": "3",
+          "name": "Auto Expo",
+          "description": "lorem ipsum",
+          "date": "2012-04-23T18:25:43.511Z"
+        },
+        {
+          "_id": "4",
+          "name": "Auto Expo",
+          "description": "lorem ipsum",
+          "date": "2012-04-23T18:25:43.511Z"
+        },
+        {
+          "_id": "5",
+          "name": "Auto Expo",
+          "description": "lorem ipsum",
+          "date": "2012-04-23T18:25:43.511Z"
+        },
+        {
+          "_id": "6",
+          "name": "Auto Expo",
+          "description": "lorem ipsum",
+          "date": "2012-04-23T18:25:43.511Z"
+        }
+      ]
+      res.json(events);
+})
+router.get('/special',(req,res)=>{
+    let events = [
+        {
+          "_id": "1",
+          "name": "Auto Expo",
+          "description": "lorem ipsum",
+          "date": "2012-04-23T18:25:43.511Z"
+        },
+        {
+          "_id": "2",
+          "name": "Auto Expo",
+          "description": "lorem ipsum",
+          "date": "2012-04-23T18:25:43.511Z"
+        },
+        {
+          "_id": "3",
+          "name": "Auto Expo",
+          "description": "lorem ipsum",
+          "date": "2012-04-23T18:25:43.511Z"
+        },
+        {
+          "_id": "4",
+          "name": "Auto Expo",
+          "description": "lorem ipsum",
+          "date": "2012-04-23T18:25:43.511Z"
+        },
+        {
+          "_id": "5",
+          "name": "Auto Expo",
+          "description": "lorem ipsum",
+          "date": "2012-04-23T18:25:43.511Z"
+        },
+        {
+          "_id": "6",
+          "name": "Auto Expo",
+          "description": "lorem ipsum",
+          "date": "2012-04-23T18:25:43.511Z"
+        }
+      ]
+      res.json(events);
+})
 
 module.exports = router;
