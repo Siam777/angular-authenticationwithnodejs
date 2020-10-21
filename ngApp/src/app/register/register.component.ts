@@ -1,4 +1,6 @@
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
+import {Router} from '@angular/router';
 import {AuthService} from '../auth.service';
 @Component({
   selector: 'app-register',
@@ -7,7 +9,9 @@ import {AuthService} from '../auth.service';
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(private _authService:AuthService) { }
+  constructor(
+    private _authService:AuthService,
+    private _router:Router) { }
   
   registerUser = {
     email:"",
@@ -18,13 +22,14 @@ export class RegisterComponent implements OnInit {
   }
 
   registerNewUser(){
-    console.log(this.registerUser);
     this._authService.registerUser(this.registerUser)
     .subscribe(response=>{
       console.log(response);
+      localStorage.setItem('token',response.token);
+      this._router.navigate(['/special']);
     },error=>{
       console.log(error);
-    })
+    }); 
   }
 
 }

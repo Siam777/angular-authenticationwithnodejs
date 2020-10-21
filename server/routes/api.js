@@ -1,4 +1,6 @@
 const express= require("express");
+
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 const User= require('../Model/user');
@@ -13,6 +15,26 @@ mongoose.connect(db, err=>{
         console.log("connected to mongodb");
     }
 })
+
+function verifyToken(req,res,next){
+  //console.log(req.headers);
+  if(!req.headers.authorization){
+    return res.status(401).send('Unauthorized request');
+  }
+  let token = req.headers.authorization.split(' ')[1];
+  if(token === 'null'){
+    return res.status(401).send('Unauthorized request');
+  }
+  jwt.verify(token,'secretKey',function(err,payload){
+    if(err){
+      return res.status(401).send('Unauthorized request');
+    }
+    req.userId = payload.suject;
+    next()
+  })
+  
+}
+
 router.get('/', (req, res)=> {
     res.send("From API route");
 })
@@ -24,7 +46,9 @@ router.post('/register',( req, res)=>{
       if(error){
           console.log("error");
       }else{
-          res.status(200).send(registerUser);
+          let payload = {subject: registerUser._id}
+          let token = jwt.sign(payload,'secretKey');
+          res.status(200).send({token});
       }
   })
 
@@ -44,7 +68,9 @@ router.post('/login',(req,res)=>{
                 if(userData.password!==user.password){
                     res.status(401).send('invalid password')
                 }else{
-                    res.status(200).send(user);
+                  let payload = {subject:user._id};
+                  let token = jwt.sign(payload,'secretKey');
+                    res.status(200).send({token});
                 }
             }
         }
@@ -93,7 +119,7 @@ router.get('/events',(req,res)=>{
       ]
       res.json(events);
 })
-router.get('/special',(req,res)=>{
+router.get('/special',verifyToken,(req,res)=>{
     let events = [
         {
           "_id": "1",
